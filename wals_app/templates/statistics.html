@@ -48,7 +48,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for family, count in stats.family_distribution.items()|sort(attribute=1, reverse=True)[:20] %}
+            {% for family, count in stats.top_families %}
             <tr>
                 <td>{{ family }}</td>
                 <td>{{ count }}</td>
