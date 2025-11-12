@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Features - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<h1>Typological Features</h1>
+
+<div class="filters">
+    <form method="get" action="{{ url_for('features') }}" class="filter-form">
+        <div class="filter-group">
+            <label for="search">Search:</label>
+            <input type="text" id="search" name="search" value="{{ search }}" placeholder="Feature name or code...">
+        </div>
+
+        <button type="submit" class="btn">Filter</button>
+        <a href="{{ url_for('features') }}" class="btn btn-secondary">Clear</a>
+    </form>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Feature ID</th>
+                <th>Feature Name</th>
+                <th>Chapter</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feature in features %}
+            <tr>
+                <td><code>{{ feature.ID }}</code></td>
+                <td><strong>{{ feature.Name }}</strong></td>
+                <td>{{ feature.Chapter_ID or '-' }}</td>
+                <td>
+                    <a href="{{ url_for('feature_detail', feature_id=feature.ID) }}" class="btn btn-small">View</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="text-center">No features found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="?page={{ page - 1 }}&search={{ search }}" class="btn">Previous</a>
+    {% endif %}
+
+    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+    <a href="?page={{ page + 1 }}&search={{ search }}" class="btn">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

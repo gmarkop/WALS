@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Languages - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<h1>Languages</h1>
+
+<div class="filters">
+    <form method="get" action="{{ url_for('languages') }}" class="filter-form">
+        <div class="filter-group">
+            <label for="search">Search:</label>
+            <input type="text" id="search" name="search" value="{{ search }}" placeholder="Language name or code...">
+        </div>
+
+        <div class="filter-group">
+            <label for="family">Family:</label>
+            <select id="family" name="family">
+                <option value="">All Families</option>
+                {% for family in families %}
+                <option value="{{ family }}" {% if family == selected_family %}selected{% endif %}>{{ family }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="macroarea">Macroarea:</label>
+            <select id="macroarea" name="macroarea">
+                <option value="">All Areas</option>
+                {% for area in macroareas %}
+                <option value="{{ area }}" {% if area == selected_macroarea %}selected{% endif %}>{{ area }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Filter</button>
+        <a href="{{ url_for('languages') }}" class="btn btn-secondary">Clear</a>
+    </form>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Family</th>
+                <th>Genus</th>
+                <th>Macroarea</th>
+                <th>ISO 639-3</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for language in languages %}
+            <tr>
+                <td><code>{{ language.ID }}</code></td>
+                <td><strong>{{ language.Name }}</strong></td>
+                <td>{{ language.Family or '-' }}</td>
+                <td>{{ language.Genus or '-' }}</td>
+                <td>{{ language.Macroarea or '-' }}</td>
+                <td>{{ language.ISO639P3code or '-' }}</td>
+                <td>
+                    <a href="{{ url_for('language_detail', language_id=language.ID) }}" class="btn btn-small">View</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">No languages found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="?page={{ page - 1 }}&search={{ search }}&family={{ selected_family }}&macroarea={{ selected_macroarea }}" class="btn">Previous</a>
+    {% endif %}
+
+    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+    <a href="?page={{ page + 1 }}&search={{ search }}&family={{ selected_family }}&macroarea={{ selected_macroarea }}" class="btn">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

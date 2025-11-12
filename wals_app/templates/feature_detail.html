@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}{{ feature.Name }} - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt;
+    <a href="{{ url_for('features') }}">Features</a> &gt;
+    {{ feature.ID }}
+</div>
+
+<div class="detail-header">
+    <h1>{{ feature.Name }}</h1>
+    <p class="feature-code">Feature ID: <code>{{ feature.ID }}</code></p>
+</div>
+
+<div class="detail-section">
+    <h2>Possible Values</h2>
+    {% if codes %}
+    <div class="codes-list">
+        {% for code in codes %}
+        <div class="code-item">
+            <span class="code-number">{{ code.Number }}</span>
+            <span class="code-name">{{ code.Name }}</span>
+            {% if code.Description %}
+            <p class="code-description">{{ code.Description }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">No value codes defined for this feature.</p>
+    {% endif %}
+</div>
+
+<div class="detail-section full-width">
+    <h2>Languages with Data ({{ values|length }})</h2>
+
+    {% if values %}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Language Code</th>
+                    <th>Language Name</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in values[:100] %}
+                <tr>
+                    <td><code>{{ value.Language_ID }}</code></td>
+                    <td>{{ value.Language_Name }}</td>
+                    <td><strong>{{ value.Code_Name }}</strong></td>
+                    <td>
+                        <a href="{{ url_for('language_detail', language_id=value.Language_ID) }}" class="btn btn-small">View Language</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if values|length > 100 %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        Showing first 100 of {{ values|length }} languages
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No language data available for this feature.</p>
+    {% endif %}
+</div>
+
+<div class="actions">
+    <a href="{{ url_for('features') }}" class="btn btn-secondary">Back to Features</a>
+</div>
+{% endblock %}

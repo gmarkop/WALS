@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Not Found - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <h1>404 - Not Found</h1>
+    <p>{{ message }}</p>
+    <div class="error-actions">
+        <a href="{{ url_for('index') }}" class="btn">Go Home</a>
+        <a href="{{ url_for('search') }}" class="btn btn-secondary">Search</a>
+    </div>
+</div>
+{% endblock %}

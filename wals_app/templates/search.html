@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<h1>Search Results</h1>
+
+<div class="search-box">
+    <form method="get" action="{{ url_for('search') }}" class="search-form">
+        <input type="text" name="q" value="{{ results.query }}" placeholder="Search languages and features...">
+        <select name="category">
+            <option value="all" {% if category == 'all' %}selected{% endif %}>All</option>
+            <option value="languages" {% if category == 'languages' %}selected{% endif %}>Languages</option>
+            <option value="features" {% if category == 'features' %}selected{% endif %}>Features</option>
+        </select>
+        <button type="submit" class="btn">Search</button>
+    </form>
+</div>
+
+{% if results.query %}
+<div class="search-results">
+    {% if results.languages %}
+    <div class="result-section">
+        <h2>Languages ({{ results.languages|length }})</h2>
+        <div class="result-list">
+            {% for language in results.languages %}
+            <div class="result-item">
+                <h3>
+                    <a href="{{ url_for('language_detail', language_id=language.ID) }}">{{ language.Name }}</a>
+                    <span class="code">{{ language.ID }}</span>
+                </h3>
+                <p>{{ language.Family }} &gt; {{ language.Genus }} | {{ language.Macroarea }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if results.features %}
+    <div class="result-section">
+        <h2>Features ({{ results.features|length }})</h2>
+        <div class="result-list">
+            {% for feature in results.features %}
+            <div class="result-item">
+                <h3>
+                    <a href="{{ url_for('feature_detail', feature_id=feature.ID) }}">{{ feature.Name }}</a>
+                    <span class="code">{{ feature.ID }}</span>
+                </h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not results.languages and not results.features %}
+    <div class="no-results">
+        <p>No results found for "{{ results.query }}"</p>
+        <p>Try different keywords or browse:</p>
+        <div class="quick-links">
+            <a href="{{ url_for('languages') }}" class="btn">All Languages</a>
+            <a href="{{ url_for('features') }}" class="btn">All Features</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="search-help">
+    <h2>Search Tips</h2>
+    <ul>
+        <li>Enter language names (e.g., "English", "Spanish")</li>
+        <li>Search by language codes (e.g., "eng", "spa")</li>
+        <li>Find features by name (e.g., "word order", "consonants")</li>
+        <li>Search by language family (e.g., "Indo-European")</li>
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
