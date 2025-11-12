@@ -161,6 +161,10 @@ class WALSDataLoader:
         stats['family_distribution'] = family_counts
         stats['macroarea_distribution'] = macroarea_counts
 
+        # Create sorted list for table display (top 20 families)
+        sorted_families = sorted(family_counts.items(), key=lambda x: x[1], reverse=True)[:20]
+        stats['top_families'] = sorted_families
+
         return stats
 
     def get_languages(self, page=1, per_page=50, search='', family='', macroarea=''):
