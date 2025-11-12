@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Home - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>The World Atlas of Language Structures</h1>
+    <h2>Local Explorer</h2>
+    <p class="lead">Explore typological features of the world's languages</p>
+</div>
+
+{% if not stats.data_available %}
+<div class="alert alert-warning">
+    <h3>Demo Mode</h3>
+    <p>Currently running with sample data. To use the full WALS dataset:</p>
+    <ol>
+        <li>Ensure you have the CLDF data in the <code>cldf/</code> directory</li>
+        <li>If you don't have it, run: <code>cldfbench wals.makecldf</code></li>
+        <li>Restart the application</li>
+    </ol>
+</div>
+{% endif %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>{{ stats.languages }}</h3>
+        <p>Languages</p>
+        <a href="{{ url_for('languages') }}" class="btn">Browse</a>
+    </div>
+    <div class="stat-card">
+        <h3>{{ stats.features }}</h3>
+        <p>Typological Features</p>
+        <a href="{{ url_for('features') }}" class="btn">Explore</a>
+    </div>
+    <div class="stat-card">
+        <h3>{{ stats.values }}</h3>
+        <p>Data Points</p>
+        <a href="{{ url_for('statistics') }}" class="btn">View Stats</a>
+    </div>
+    <div class="stat-card">
+        <h3>{{ stats.families }}</h3>
+        <p>Language Families</p>
+        <a href="{{ url_for('map_view') }}" class="btn">Map View</a>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2>About WALS</h2>
+    <p>
+        The World Atlas of Language Structures (WALS) is a comprehensive database of structural
+        (phonological, grammatical, lexical) properties of languages gathered from descriptive materials.
+        This local explorer allows you to browse and analyze WALS data on your own computer.
+    </p>
+
+    <h3>Quick Start</h3>
+    <ul>
+        <li><strong>Browse Languages:</strong> Explore over 2,500 languages with detailed information</li>
+        <li><strong>Explore Features:</strong> Discover 192 typological features across 11 linguistic areas</li>
+        <li><strong>View Map:</strong> See the geographic distribution of languages</li>
+        <li><strong>Search:</strong> Find specific languages or features quickly</li>
+    </ul>
+</div>
+
+<div class="content-section">
+    <h2>Featured Topics</h2>
+    <div class="topic-grid">
+        <div class="topic-card">
+            <h4>Phonology</h4>
+            <p>Consonant and vowel inventories, syllable structure</p>
+        </div>
+        <div class="topic-card">
+            <h4>Morphology</h4>
+            <p>Word formation, inflectional systems</p>
+        </div>
+        <div class="topic-card">
+            <h4>Word Order</h4>
+            <p>Order of subject, object, verb, and other constituents</p>
+        </div>
+        <div class="topic-card">
+            <h4>Grammatical Categories</h4>
+            <p>Gender, number, case, tense, aspect, mood</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

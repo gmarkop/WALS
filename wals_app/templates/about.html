@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}About - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<h1>About WALS Local Explorer</h1>
+
+<div class="about-section">
+    <h2>About This Application</h2>
+    <p>
+        WALS Local Explorer is a web-based application that allows you to explore the World Atlas
+        of Language Structures (WALS) dataset on your local computer. It provides an intuitive
+        interface for browsing languages, exploring typological features, and analyzing linguistic data.
+    </p>
+
+    <h3>Features</h3>
+    <ul>
+        <li><strong>Language Browser:</strong> Browse and search through thousands of languages</li>
+        <li><strong>Feature Explorer:</strong> Explore typological features across linguistic domains</li>
+        <li><strong>Interactive Map:</strong> Visualize the geographic distribution of languages</li>
+        <li><strong>Statistics:</strong> View data visualizations and statistics</li>
+        <li><strong>Advanced Search:</strong> Find languages and features quickly</li>
+        <li><strong>Offline Access:</strong> Works entirely on your local machine</li>
+    </ul>
+</div>
+
+<div class="about-section">
+    <h2>About WALS</h2>
+    <p>
+        The World Atlas of Language Structures (WALS) is a comprehensive database of structural
+        (phonological, grammatical, lexical) properties of languages gathered from descriptive materials.
+        It was first published as a book with CD-ROM in 2005 by Oxford University Press.
+    </p>
+
+    <h3>Coverage</h3>
+    <ul>
+        <li><strong>2,679 languages</strong> from all major language families</li>
+        <li><strong>192 features</strong> covering phonology, morphology, syntax, and lexicon</li>
+        <li><strong>Global coverage</strong> with languages from all continents</li>
+        <li><strong>144 authors</strong> contributing expert knowledge</li>
+    </ul>
+
+    <h3>Citation</h3>
+    <p>
+        If you use WALS data in your research, please cite:
+    </p>
+    <blockquote>
+        Dryer, Matthew S. & Haspelmath, Martin (eds.) 2013.
+        The World Atlas of Language Structures Online.
+        Leipzig: Max Planck Institute for Evolutionary Anthropology.
+        (Available online at https://wals.info)
+    </blockquote>
+</div>
+
+<div class="about-section">
+    <h2>Technology</h2>
+    <p>This application is built with:</p>
+    <ul>
+        <li><strong>Flask:</strong> Python web framework</li>
+        <li><strong>CLDF:</strong> Cross-Linguistic Data Format for standardized data access</li>
+        <li><strong>Leaflet:</strong> Interactive maps</li>
+        <li><strong>Chart.js:</strong> Data visualizations</li>
+    </ul>
+</div>
+
+<div class="about-section">
+    <h2>License</h2>
+    <p>
+        WALS data is licensed under the
+        <strong>Creative Commons Attribution 4.0 International License (CC-BY-4.0)</strong>.
+    </p>
+    <p>
+        This means you are free to share and adapt the data, provided you give appropriate credit.
+    </p>
+</div>
+
+<div class="about-section">
+    <h2>Resources</h2>
+    <ul>
+        <li><a href="https://wals.info" target="_blank">WALS Online</a></li>
+        <li><a href="https://github.com/cldf-datasets/wals" target="_blank">WALS CLDF Dataset (GitHub)</a></li>
+        <li><a href="https://cldf.clld.org" target="_blank">CLDF Specification</a></li>
+        <li><a href="https://glottolog.org" target="_blank">Glottolog</a></li>
+    </ul>
+</div>
+{% endblock %}

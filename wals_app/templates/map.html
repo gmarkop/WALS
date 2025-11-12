@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Language Map - WALS Local Explorer{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<h1>Geographic Distribution of Languages</h1>
+
+<div class="map-controls">
+    <label>
+        <input type="checkbox" id="cluster-toggle" checked> Cluster markers
+    </label>
+</div>
+
+<div id="language-map" style="height: 600px; width: 100%; margin: 20px 0;"></div>
+
+<div class="map-legend">
+    <h3>Legend</h3>
+    <p>Each marker represents a language. Click on a marker to see language details.</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize map
+    var map = L.map('language-map').setView([20, 0], 2);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18
+    }).addTo(map);
+
+    // Create marker cluster group
+    var markers = L.markerClusterGroup();
+
+    // Fetch language data
+    fetch('/api/languages/geo')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(function(lang) {
+                var marker = L.marker([lang.lat, lang.lon]);
+                marker.bindPopup(
+                    '<strong>' + lang.name + '</strong><br>' +
+                    'Code: ' + lang.id + '<br>' +
+                    'Family: ' + lang.family + '<br>' +
+                    '<a href="/language/' + lang.id + '">View details</a>'
+                );
+                markers.addLayer(marker);
+            });
+
+            map.addLayer(markers);
+        })
+        .catch(error => {
+            console.error('Error loading language data:', error);
+            alert('Error loading language data. Please check the console for details.');
+        });
+
+    // Toggle clustering
+    document.getElementById('cluster-toggle').addEventListener('change', function(e) {
+        if (e.target.checked) {
+            map.addLayer(markers);
+        } else {
+            map.removeLayer(markers);
+            markers.eachLayer(function(layer) {
+                map.addLayer(layer);
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

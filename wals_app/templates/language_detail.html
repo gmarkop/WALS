@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}{{ language.Name }} - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt;
+    <a href="{{ url_for('languages') }}">Languages</a> &gt;
+    {{ language.Name }}
+</div>
+
+<div class="detail-header">
+    <h1>{{ language.Name }}</h1>
+    <p class="language-code">WALS Code: <code>{{ language.ID }}</code></p>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-section">
+        <h2>Classification</h2>
+        <table class="info-table">
+            <tr>
+                <th>Family:</th>
+                <td>{{ language.Family or 'Unknown' }}</td>
+            </tr>
+            <tr>
+                <th>Subfamily:</th>
+                <td>{{ language.Subfamily or '-' }}</td>
+            </tr>
+            <tr>
+                <th>Genus:</th>
+                <td>{{ language.Genus or 'Unknown' }}</td>
+            </tr>
+            <tr>
+                <th>Macroarea:</th>
+                <td>{{ language.Macroarea or 'Unknown' }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="detail-section">
+        <h2>Identifiers</h2>
+        <table class="info-table">
+            <tr>
+                <th>WALS Code:</th>
+                <td><code>{{ language.ID }}</code></td>
+            </tr>
+            <tr>
+                <th>ISO 639-3:</th>
+                <td>{{ language.ISO639P3code or '-' }}</td>
+            </tr>
+            <tr>
+                <th>Glottocode:</th>
+                <td>
+                    {% if language.Glottocode %}
+                    <a href="https://glottolog.org/resource/languoid/id/{{ language.Glottocode }}" target="_blank">
+                        {{ language.Glottocode }}
+                    </a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="detail-section">
+        <h2>Geographic Information</h2>
+        <table class="info-table">
+            <tr>
+                <th>Latitude:</th>
+                <td>{{ language.Latitude or '-' }}</td>
+            </tr>
+            <tr>
+                <th>Longitude:</th>
+                <td>{{ language.Longitude or '-' }}</td>
+            </tr>
+            {% if language.Latitude and language.Longitude %}
+            <tr>
+                <td colspan="2">
+                    <div class="mini-map" style="height: 200px; background: #e0e0e0; text-align: center; line-height: 200px;">
+                        Map placeholder ({{ language.Latitude }}, {{ language.Longitude }})
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+
+<div class="detail-section full-width">
+    <h2>Typological Features ({{ values|length }})</h2>
+
+    {% if values %}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Feature ID</th>
+                    <th>Feature Name</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in values %}
+                <tr>
+                    <td><code>{{ value.Parameter_ID }}</code></td>
+                    <td>{{ value.Feature_Name }}</td>
+                    <td><strong>{{ value.Code_Name }}</strong></td>
+                    <td>
+                        <a href="{{ url_for('feature_detail', feature_id=value.Parameter_ID) }}" class="btn btn-small">View Feature</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No feature data available for this language.</p>
+    {% endif %}
+</div>
+
+<div class="actions">
+    <a href="{{ url_for('languages') }}" class="btn btn-secondary">Back to Languages</a>
+</div>
+{% endblock %}

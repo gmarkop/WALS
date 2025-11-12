@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Statistics - WALS Local Explorer{% endblock %}
+
+{% block content %}
+<h1>Dataset Statistics</h1>
+
+<div class="stats-overview">
+    <div class="stat-box">
+        <h2>{{ stats.languages }}</h2>
+        <p>Total Languages</p>
+    </div>
+    <div class="stat-box">
+        <h2>{{ stats.features }}</h2>
+        <p>Typological Features</p>
+    </div>
+    <div class="stat-box">
+        <h2>{{ stats.values }}</h2>
+        <p>Data Points</p>
+    </div>
+    <div class="stat-box">
+        <h2>{{ stats.families }}</h2>
+        <p>Language Families</p>
+    </div>
+</div>
+
+<div class="chart-section">
+    <h2>Languages by Family</h2>
+    <div class="chart-container">
+        <canvas id="family-chart"></canvas>
+    </div>
+</div>
+
+<div class="chart-section">
+    <h2>Languages by Macroarea</h2>
+    <div class="chart-container">
+        <canvas id="macroarea-chart"></canvas>
+    </div>
+</div>
+
+<div class="data-table-section">
+    <h2>Top Language Families</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Family</th>
+                <th>Number of Languages</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for family, count in stats.family_distribution.items()|sort(attribute=1, reverse=True)[:20] %}
+            <tr>
+                <td>{{ family }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Family distribution chart
+    var familyData = {{ stats.family_distribution|tojson }};
+    var familyLabels = Object.keys(familyData).slice(0, 10);
+    var familyCounts = familyLabels.map(label => familyData[label]);
+
+    new Chart(document.getElementById('family-chart'), {
+        type: 'bar',
+        data: {
+            labels: familyLabels,
+            datasets: [{
+                label: 'Number of Languages',
+                data: familyCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Macroarea distribution chart
+    var macroareaData = {{ stats.macroarea_distribution|tojson }};
+    var macroareaLabels = Object.keys(macroareaData);
+    var macroareaCounts = macroareaLabels.map(label => macroareaData[label]);
+
+    new Chart(document.getElementById('macroarea-chart'), {
+        type: 'pie',
+        data: {
+            labels: macroareaLabels,
+            datasets: [{
+                data: macroareaCounts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    });
+});
+</script>
+{% endblock %}
